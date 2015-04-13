@@ -11,10 +11,10 @@
 ## ================================================================
 
 # set working dir
-setwd('/Volumes/BackUp/temp/Illumina_preprocessing/data')
+setwd('~/Illumina_preprocessing/data')
 
 # source functions
-source('/Volumes/BackUp/temp/Illumina_preprocessing/Illumina_16S_functions.R')
+source('~/Illumina_preprocessing/Illumina_16S_functions.R')
 
 # generate sample names
 sample.names <- sapply(list.files(pattern='_R1_'), function(x) strsplit(x, '-', fixed=T)[[1]][1])
