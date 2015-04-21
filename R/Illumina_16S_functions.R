@@ -2,7 +2,7 @@
 
 ## ================================================================
 ## Illumina pre-processing functions
-## April 13 2015
+## April 20 2015
 ## ================================================================
 
 
@@ -10,7 +10,7 @@ library(Biostrings)
 
 
 ## hardcoded path to Usearch
-my.usearch.path <- '/Applications/usearch8.0.1517'
+my.usearch.path <- '$PWD/usearch8.0.1517'
 
 
 ##
@@ -22,14 +22,21 @@ mergeReads <- function(forward = list.files(pattern='_R1_.*fastq$'), # list all 
                        min.merged.length = 450,
                        min.overlap = 10,
                        max.mismatches = 3,
+                       output.notmerged = F, # set this to TRUE to output nonmerged reads in fasta and fastq formats
                        usearch.path = my.usearch.path) {
   
   # call usearch to merge fastq pairs
-  for(i in seq_along(forward)) {
+  if(output.notmerged) {
+    for(i in seq_along(forward)) {
+      system(paste(usearch.path, ' -fastq_mergepairs ', forward[i], ' -reverse ', reverse[i], ' -fastq_minmergelen ', min.merged.length, 
+                   ' -fastq_minovlen ', min.overlap, ' -fastq_maxdiffs ', max.mismatches, ' -fastqout ', out.names[i], '_merged.fastq', 
+                   ' -fastqout_notmerged_fwd ', out.names[i], '_notmerged_fwd.fastq', ' -fastqout_notmerged_rev ', out.names[i], '_notmerged_rev.fastq', 
+                   ' -fastaout_notmerged_fwd ', out.names[i], '_notmerged_fwd.fasta', ' -fastaout_notmerged_rev ', out.names[i], '_notmerged_rev.fasta', sep=''))
+    }
+  } else for(i in seq_along(forward)) {
     system(paste(usearch.path, ' -fastq_mergepairs ', forward[i], ' -reverse ', reverse[i], ' -fastq_minmergelen ', min.merged.length, 
                  ' -fastq_minovlen ', min.overlap, ' -fastq_maxdiffs ', max.mismatches, ' -fastqout ', out.names[i], '_merged.fastq', sep=''))
-  }  
-
+  }
 }
 
 
